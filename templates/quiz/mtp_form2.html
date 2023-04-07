@@ -1,0 +1,12 @@
+ <h2>Select topics:</h2>
+  <form method="POST" action="{% url 'multi_topic_test' %}">
+    {% csrf_token %}
+    {% for topic in topics %}
+      <div>
+        <input type="checkbox" name="topic" value="{{ topic.id }}" id="topic_{{ topic.id }}">
+        <label for="topic_{{ topic.id }}">{{ topic.topic}}</label>
+        <input type="number" name="mcq_no" value="10" min="1" max="150">
+      </div>
+    {% endfor %}
+    <button type="submit">Submit</button>
+  </form>

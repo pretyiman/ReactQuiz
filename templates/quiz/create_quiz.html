@@ -1,0 +1,42 @@
+<form method="POST">
+    {% csrf_token %}
+    <label for="id_name">Name:</label>
+    <input type="text" id="id_name" name="name">
+    <br>
+    <label for="id_description">Description:</label>
+    <textarea id="id_description" name="description"></textarea>
+    <br>
+    <label for="id_subject">Subject:</label>
+    <select id="id_subject" name="subject">
+        <option value="">-- Select a subject --</option>
+        {% for subject in subjects %}
+            <option value="{{ subject.id }}"
+                    {% if selected_subject == subject.id %}
+                        selected
+                    {% endif %}>
+                {{ subject.subject }}
+            </option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="id_topics">Topics:</label>
+    <select id="id_topics" name="topics" multiple>
+        {% for topic in topics %}
+            <option value="{{ topic.id }}"
+             {% if topic.id|stringformat:"s" in selected_topics %}
+                        selected
+                    {% endif %}>
+                {{ topic.topic }}
+            </option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="id_questions">Questions:</label>
+    <select id="id_questions" name="questions" multiple>
+        {% for question in questions %}
+            <option value="{{ question.id }}">{{ question.text }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <input type="submit" value="Create Quiz">
+</form>

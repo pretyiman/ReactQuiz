@@ -1,0 +1,12 @@
+  <h1>Select Topic</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    {% for topic in topics %}
+      <div>
+        <input type="checkbox" id="topic-{{ topic.id }}" name="topics[]" value="{{ topic.id }}">
+        <label for="topic-{{ topic.id }}">{{ topic.name }}</label>
+      </div>
+    {% endfor %}
+    <button type="submit">Next</button>
+  </form>

@@ -1,0 +1,82 @@
+ <h1>Single topic Practice</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="subject">Select Subject:</label>
+      <select name="subject" id="subject" class="form-control">
+        {% for subject in subjects %}
+          <option value="{{ subject.id }}">{{ subject.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="topic">Select Topic:</label>
+      <select name="topic" id="topic" class="form-control" disabled>
+        <option value="">-- Select a subject first --</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Start Practice</button>
+  </form>
+
+  {% if questions %}
+    <h2>Question {{ current_question_index }} of {{ total_questions }}</h2>
+    <p>{{ current_question.text }}</p>
+    <form method="POST">
+      {% csrf_token %}
+      {% for option in current_question.options %}
+        <div class="form-check">
+          <input type="radio" class="form-check-input" name="answer" value="{{ option.id }}" id="option{{ option.id }}">
+          <label class="form-check-label" for="option{{ option.id }}">{{ option.text }}</label>
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Submit Answer</button>
+    </form>
+  {% endif %}
+
+  {% if result %}
+    <h2>Result</h2>
+    {% if result.correct %}
+      <p class="text-success">Correct!</p>
+    {% else %}
+      <p class="text-danger">Wrong!</p>
+      <p>The correct answer is "{{ result.correct_answer }}".</p>
+    {% endif %}
+    <button onclick="location.reload()" class="btn btn-primary">Next Question</button>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Disable topic dropdown initially
+      $('#topic').prop('disabled', true);
+
+      // Handle subject selection
+      $('#subject').on('change', function() {
+        var subjectId = $(this).val();
+        if (subjectId) {
+          // Enable topic dropdown
+          $('#topic').prop('disabled', false);
+
+          // Load topics for selected subject using AJAX
+          axios.get('{% url "get_topics" %}', { params: { subject_id: subjectId } })
+            .then(function(response) {
+              var options = '<option value="">-- Select a topic --</option>';
+              response.data.forEach(function(topic) {
+                options += '<option value="' + topic.id + '">' + topic.topic + '</option>';
+              });
+              $('#topic').html(options);
+            })
+            .catch(function(error) {
+              console.error(error);
+            });
+        } else {
+          // Disable topic dropdown
+          $('#topic').prop('disabled', true);
+          $('#topic').html('<option value="">-- Select a subject first --</option>');
+        }
+      });
+    });
+  </script>

@@ -1,0 +1,9 @@
+  <form method="post" action="{% url 'load_questions' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="num_questions">How many questions would you like to load?</label>
+      <input type="number" class="form-control" id="num_questions" name="num_questions" min="1" max="10" required>
+    </div>
+    <input type="hidden" name="topic_id" value="{{ topic_id }}">
+    <button type="submit" class="btn btn-primary">Load Questions</button>
+  </form>

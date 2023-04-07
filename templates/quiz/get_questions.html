@@ -1,0 +1,13 @@
+{% for topic in topics %}
+  <div id="topic-{{ topic.id }}" class="form-check topic-checkbox d-none">
+    <input type="checkbox" name="topics" class="form-check-input topic-checkbox-input" value="{{ topic.id }}">
+    <label class="form-check-label">{{ topic.topic }}</label>
+  </div>
+{% endfor %}
+
+{% for question in questions %}
+  <div class="form-check question-checkbox d-none">
+    <input type="checkbox" name="questions" class="form-check-input question-checkbox-input" value="{{ question.id }}">
+    <label class="form-check-label">{{ question.text }}</label>
+  </div>
+{% endfor %}

@@ -1,0 +1,50 @@
+<!-- stp_form.html -->
+
+<!DOCTYPE html>
+
+<div class="container">
+
+
+        <div class="row align-items-center justify-content-center">
+          <div class="col">
+
+
+        <br>
+          <form id='myform' method="POST">
+            {% csrf_token %}
+            <div class="form-group row align-items-center justify-content-center">
+              <div class="col-8">
+      <select id="subject" name="subject" class="form-control" onchange=" document.getElementById('myform').submit();">
+    <option class="ops" value="0">Select Subject</option>
+    {% for subject in subjects %}
+        <option value="{{subject.id}}" {% if current_subject_id == subject.id %}selected="selected"{% endif %}>{{subject.subject}}</option>
+    {% endfor %}
+</select>
+
+              </div>
+            </div>
+            <div class="form-group row align-items-center justify-content-center">
+
+              <div class="col-8">
+                <select id="topic" name="topic" class="form-control">
+                  <option value=''>Select   Topic</option>
+                    {% for topic in topics %}
+                    <option value={{topic.id}}>{{topic.topic}}</option>
+                    {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group row align-items-center justify-content-center">
+              <div class="col-8">
+                <input id="mcq_no" name="mcq_no" type="number" value=10 class="form-control" aria-describedby="textHelpBlock">
+                <span id="textHelpBlock" class="form-text text-muted">how many questions you want to try</span>
+                <div class="form-group">
+                  <input type="Submit" class="btn btn-block" value="Submit">
+                </div>
+
+              </div>
+            </div>
+          </form>
+          </div>
+    </div>
+</div>

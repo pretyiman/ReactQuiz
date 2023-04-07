@@ -1,0 +1,10 @@
+  <form method="POST" action="{% url 'select_topic' %}">
+    {% csrf_token %}
+    {% for subject in subjects %}
+      <div>
+        <input type="checkbox" id="subject-{{ subject.id }}" name="subjects[]" value="{{ subject.id }}">
+        <label for="subject-{{ subject.id }}">{{ subject.subject }}</label>
+      </div>
+    {% endfor %}
+    <button type="submit">Next</button>
+  </form>

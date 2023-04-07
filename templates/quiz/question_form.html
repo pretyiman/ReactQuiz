@@ -1,0 +1,28 @@
+
+  <form method="POST" action="{% url 'create_question_new' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script>
+$(document).ready(function() {
+$('#id_subject').change(function() {
+  var subjectId = $(this).val();
+  $.ajax({
+    url: '{% url 'get_topics' %}',
+    data: {
+      'subject_id': subjectId
+    },
+    dataType: 'json',
+    success: function(data) {
+      $('#id_topic').empty();
+      $('#id_topic').append($('<option>').text('---------').attr('value', ''));
+      $.each(data, function(i, item) {
+        $('#id_topic').append($('<option>').text(item.topic).attr('value', item.id));
+      });
+    }
+  });
+});
+}); </script>
+    <button type="submit">Save</button>
+  </form>

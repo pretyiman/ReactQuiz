@@ -1,0 +1,59 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block after_field_sets %}
+  <h1>Quiz Admin Page</h1>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'js/quiz_admin.js' %}"></script>
+
+  <div class="field-box">
+    <div class="field-row">
+      <div class="field-label">Subjects:</div>
+      <div class="field-value">{{ form.subject }}</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label">Topics:</div>
+      <div class="field-value">{{ form.topics }}</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label">Questions:</div>
+      <div class="field-value">{{ form.questions }}</div>
+    </div>
+  </div>
+
+  <script>
+    // Get references to the subject and topic dropdown lists.
+    const subjectSelect = document.querySelector('#id_subject');
+    const topicSelect = document.querySelector('#id_topics');
+    const questionSelect = document.querySelector('#id_questions');
+
+    function updateTopicOptions() {
+      const selectedSubjectIds = Array.from(subjectSelect.selectedOptions).map(option => option.value);
+      const url = `/api/topics/?subject__id__in=${selectedSubjectIds.join(',')}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          topicSelect.innerHTML = data.map(topic => `<option value="${topic.id}">${topic.name}</option>`).join('');
+          updateQuestionOptions();
+        })
+        .catch(error => console.error(error));
+    }
+
+    function updateQuestionOptions() {
+      const selectedTopicIds = Array.from(topicSelect.selectedOptions).map(option => option.value);
+      const url = `/api/questions/?topics__id__in=${selectedTopicIds.join(',')}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          questionSelect.innerHTML = data.map(question => `<option value="${question.id}">${question.text}</option>`).join('');
+        })
+        .catch(error => console.error(error));
+    }
+
+    subjectSelect.addEventListener('change', updateTopicOptions);
+    topicSelect.addEventListener('change', updateQuestionOptions);
+
+    updateTopicOptions();
+  </script>
+{% endblock %}

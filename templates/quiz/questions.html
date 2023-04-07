@@ -1,0 +1,81 @@
+<!-- questions.html -->
+
+<form method="POST" action="{% url 'load_questions' %}">
+  {% csrf_token %}
+  <div>
+    <label for="subject">Subject:</label>
+    <select name="subject" id="subject">
+      <option value="">--Select Subject--</option>
+      {% for subject in subjects %}
+        <option value="{{ subject.id }}">{{ subject.subject }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label for="topic">Topic:</label>
+    <select name="topic" id="topic" disabled>
+      <option value="">--Select Topic--</option>
+    </select>
+  </div>
+  <div>
+    <label for="num_questions">Number of Questions:</label>
+    <input type="number" name="num_questions" id="num_questions" min="1" max="10" required>
+  </div>
+  <button type="submit">Load Questions</button>
+</form>
+
+{% if questions %}
+  <form method="POST" action="{% url 'submit_answers' %}">
+    {% csrf_token %}
+    {% for question in questions %}
+      <h3>{{ question.question }}</h3>
+      <div>
+        <input type="radio" name="question{{ forloop.counter }}" value="A" id="option_A_{{ question.id }}" required>
+        <label for="option_A_{{ question.id }}">{{ question.option_A }}</label>
+      </div>
+      <div>
+        <input type="radio" name="question{{ forloop.counter }}" value="B" id="option_B_{{ question.id }}">
+        <label for="option_B_{{ question.id }}">{{ question.option_B }}</label>
+      </div>
+      <div>
+        <input type="radio" name="question{{ forloop.counter }}" value="C" id="option_C_{{ question.id }}">
+        <label for="option_C_{{ question.id }}">{{ question.option_C }}</label>
+      </div>
+      <div>
+        <input type="radio" name="question{{ forloop.counter }}" value="D" id="option_D_{{ question.id }}">
+        <label for="option_D_{{ question.id }}">{{ question.option_D }}</label>
+      </div>
+    {% endfor %}
+    <button type="submit">Submit Answers</button>
+  </form>
+{% endif %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#subject').change(function() {
+      var subject_id = $(this).val();
+      if (subject_id) {
+        $('#topic').prop('disabled', false);
+        $.ajax({
+          url: '/get_topics/',
+          data: {
+            'subject_id': subject_id
+          },
+          dataType: 'json',
+          success: function(data) {
+            $('#topic').empty();
+            $('#topic').append($('<option>').val('').text('--Select Topic--'));
+            $.each(data, function(i, topic) {
+              $('#topic').append($('<option>').val(topic.id).text(topic.topic));
+            });
+          }
+        });
+      } else {
+        $('#topic').prop('disabled', true);
+        $('#topic').empty();
+        $('#topic').append($('<option>').val('').text('--Select Topic--'));
+      }
+    });
+  });
+</script>
+

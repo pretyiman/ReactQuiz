@@ -1,0 +1,21 @@
+<!-- test1.html -->
+  <div class="container">
+
+    <h1>{{ questions.0.subject.name }} - {{ questions.0.topic.name }}</h1>
+
+    <form method="POST" action="{% url 'quiz_create' %}">
+      {% csrf_token %}
+      {% for question in questions %}
+        <hr>
+        <h5>{{ forloop.counter }}. {{ question.question }}</h5>
+          <div>
+      <input type="checkbox" name="question" value="{{ question.id }}" id="question_{{ question.id }}">
+      <label for="question_{{ question.id }}">{{ question.question}}</label>
+        </div>
+      {% endfor %}
+
+      <input type="hidden" name="hidden_q" value="{{ hidden_q }}">
+      <br>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>

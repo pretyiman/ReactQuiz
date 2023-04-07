@@ -1,0 +1,45 @@
+<!-- test1.html -->
+  <div class="container">
+
+    <h1>{{ questions.0.subject.name }} - {{ questions.0.topic.name }}</h1>
+
+    <form method="POST" action="{% url 'results' %}">
+      {% csrf_token %}
+      {% for question in questions %}
+        <hr>
+        <h5>{{ forloop.counter }}. {{ question.question }}</h5>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="{{ question.id }}" id="{{ question.option_A }}" value="{{ question.option_A }}" required>
+          <label class="form-check-label" for="{{ question.option_A }}">
+            {{ question.option_A }}
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="{{ question.id }}" id="{{ question.option_B }}" value="{{ question.option_B }}" required>
+          <label class="form-check-label" for="{{ question.option_B }}">
+            {{ question.option_B }}
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="{{ question.id }}" id="{{ question.option_C }}" value="{{ question.option_C }}" required>
+          <label class="form-check-label" for="{{ question.option_C }}">
+            {{ question.option_C }}
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="{{ question.id }}" id="{{ question.option_D }}" value="{{ question.option_D }}" required>
+          <label class="form-check-label" for="{{ question.option_D }}">
+            {{ question.option_D }}
+          </label>
+        </div>
+      {% endfor %}
+
+      <input type="hidden" name="hidden_q" value="{{ hidden_q }}">
+      <br>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>

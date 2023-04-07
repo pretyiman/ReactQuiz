@@ -1,0 +1,11 @@
+<h2>Quiz Details:</h2>
+<form method="POST" action="{% url 'quiz_topic' %}">
+  {% csrf_token %}
+  {% for topic in topics %}
+    <div>
+      <input type="checkbox" name="topic" value="{{ topic.id }}" id="topic_{{ topic.id }}">
+      <label for="topic_{{ topic.id }}">{{ topic.topic}}</label>
+    </div>
+  {% endfor %}
+  <button type="submit">Submit</button>
+</form>

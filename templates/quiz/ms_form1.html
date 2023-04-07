@@ -1,0 +1,11 @@
+ <h2>Select subjects:</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {% for subject in subjects %}
+      <div>
+        <input type="checkbox" name="subject" value="{{ subject.id }}" id="subject_{{ subject.id }}">
+        <label for="subject_{{ subject.id }}">{{ subject.subject }}</label>
+      </div>
+    {% endfor %}
+    <button type="submit">Submit</button>
+  </form>
